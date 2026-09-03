@@ -1,16 +1,19 @@
 package com.app.service;
 
 import com.app.dao.UserDAO;
+import com.app.dao.UserJpaDAO;
 import com.app.model.User;
 
 import java.util.Date;
 
 public class UserService {
     private UserDAO userDAO;
+    private UserJpaDAO userJpaDAO;
     private EmailService emailService;
 
     public UserService() {
         this.userDAO = new UserDAO();
+        this.userJpaDAO = new UserJpaDAO();
         this.emailService = new EmailService();
     }
 
@@ -19,8 +22,7 @@ public class UserService {
                 || password == null || password.trim().isEmpty()) {
             return null;
         }
-        User user = userDAO.findByUsernameAndPassword(username.trim(), password.trim());
-        return user;
+        return userDAO.findByUsernameAndPassword(username.trim(), password.trim());
     }
 
     public User findByUsername(String username) {
@@ -29,6 +31,31 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userDAO.findByEmail(email);
+    }
+
+    public User getUserById(String id) {
+        return userDAO.findById(id);
+    }
+
+    /**
+     * Cập nhật thông tin profile: fullName, phone, images
+     */
+    public boolean updateProfile(String id, String fullName, String phone, String images) {
+        if (id == null || id.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            // Cập nhật qua DAO
+            userDAO.updateProfile(id, fullName, phone, images);
+            // Đồng bộ qua JPA DAO nếu cần
+            try {
+                userJpaDAO.updateProfile(id, fullName, phone, images);
+            } catch (Exception ignored) {}
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -47,8 +74,14 @@ public class UserService {
         user.setOtp(otp);
         user.setOtpExpiry(getExpiryDate(5)); // Hết hạn sau 5 phút
         user.setActive(false); // Chưa kích hoạt
+        if (user.getImages() == null || user.getImages().isEmpty()) {
+            user.setImages("default-avatar.png");
+        }
 
         userDAO.insert(user);
+        try {
+            userJpaDAO.insert(user);
+        } catch (Exception ignored) {}
 
         // Gửi OTP qua email
         String subject = "Kích hoạt tài khoản - LoginURL";
@@ -78,6 +111,9 @@ public class UserService {
             user.setOtp(null);
             user.setOtpExpiry(null);
             userDAO.update(user);
+            try {
+                userJpaDAO.update(user);
+            } catch (Exception ignored) {}
             return true;
         }
         return false;
@@ -145,6 +181,9 @@ public class UserService {
             user.setOtp(null);
             user.setOtpExpiry(null);
             userDAO.update(user);
+            try {
+                userJpaDAO.update(user);
+            } catch (Exception ignored) {}
             return true;
         }
         return false;

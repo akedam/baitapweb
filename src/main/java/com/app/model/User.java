@@ -1,17 +1,50 @@
 package com.app.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+@Entity
+@Table(name = "users")
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "id", length = 50)
     private String id;
+
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
+
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
+
+    @Column(name = "fullname", length = 100)
     private String fullName;
+
+    @Column(name = "email", length = 100)
     private String email;
-    
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "images", length = 255)
+    private String images;
+
     // OTP & Activation Fields
+    @Column(name = "is_active")
     private boolean isActive;
+
+    @Column(name = "otp", length = 10)
     private String otp;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "otp_expiry")
     private Date otpExpiry;
 
     public User() {}
@@ -38,6 +71,12 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getImages() { return images; }
+    public void setImages(String images) { this.images = images; }
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }

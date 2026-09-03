@@ -60,6 +60,27 @@
             <version>2.0.9</version>
         </dependency>
 
+        <!-- SiteMesh 3 Decorator (Jakarta EE compatible) -->
+        <dependency>
+            <groupId>org.sitemesh</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <!-- Jakarta Persistence API (JPA) -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- Hibernate Core JPA Provider -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.4.4.Final</version>
+        </dependency>
+
         <!-- Jakarta Mail API -->
         <dependency>
             <groupId>jakarta.mail</groupId>

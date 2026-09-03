@@ -1,8 +1,24 @@
 package com.app.model;
 
-public class Category {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "categories")
+public class Category implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "id", length = 50)
     private String id;
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "description", length = 500)
     private String description;
 
     public Category() {}
