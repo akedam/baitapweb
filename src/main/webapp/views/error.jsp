@@ -1,35 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <!DOCTYPE html>
-        <html lang="vi">
-
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Lỗi Đăng Nhập - LoginURL</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-        </head>
-
-        <body class="login-page">
-            <div class="login-container">
-                <div class="login-card">
-                    <div class="login-header">
-                        <h1>❌ Đăng Nhập Thất Bại</h1>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Thông Báo Lỗi - Error</title>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6 text-center">
+                <div class="card border-0 shadow-sm rounded-4 p-5">
+                    <div class="mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 90px; height: 90px; font-size: 42px;">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </div>
                     </div>
-
-                    <div class="alert alert-error">
-                        ⚠️ ${errorMessage}
+                    <h3 class="fw-bold text-dark mb-2">Đã Xảy Ra Lỗi</h3>
+                    <p class="text-muted mb-4">${not empty errorMessage ? errorMessage : 'Yêu cầu không thể thực hiện hoặc trang không tồn tại.'}</p>
+                    
+                    <div>
+                        <a href="${pageContext.request.contextPath}/home" class="btn btn-primary px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-house-door me-1"></i> Quay về Trang Chủ
+                        </a>
                     </div>
-
-                    <p style="text-align: center; color: #888; margin-bottom: 24px;">
-                        Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.
-                    </p>
-
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-primary btn-block">
-                        ↩️ Quay Lại Đăng Nhập
-                    </a>
                 </div>
             </div>
-        </body>
-
-        </html>
+        </div>
+    </div>
+</body>
+</html>

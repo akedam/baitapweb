@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+    <!-- Authentication layout -->
+    <mapping path="/login" decorator="/views/decorators/auth.jsp"/>
+    <mapping path="/register" decorator="/views/decorators/auth.jsp"/>
+    <mapping path="/forgot-password" decorator="/views/decorators/auth.jsp"/>
+    <mapping path="/verify-otp" decorator="/views/decorators/auth.jsp"/>
+    <mapping path="/reset-password" decorator="/views/decorators/auth.jsp"/>
+
+    <!-- Main web layout -->
+    <mapping path="/" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/home" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/profile" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/category" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/category/*" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/product" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/product/*" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/error" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/*" decorator="/views/decorators/web.jsp"/>
+
+    <!-- Exclude static resources and decorator jsp files -->
+    <mapping path="/css/*" exclude="true"/>
+    <mapping path="/js/*" exclude="true"/>
+    <mapping path="/images/*" exclude="true"/>
+    <mapping path="/uploads/*" exclude="true"/>
+    <mapping path="/assets/*" exclude="true"/>
+    <mapping path="/views/decorators/*" exclude="true"/>
+</sitemesh>
