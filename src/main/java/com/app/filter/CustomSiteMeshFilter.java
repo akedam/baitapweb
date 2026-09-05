@@ -7,22 +7,23 @@ public class CustomSiteMeshFilter extends ConfigurableSiteMeshFilter {
 
     @Override
     protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
-        // Decorator for Authentication pages
-        builder.addDecoratorPath("/login", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/register", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/forgot-password", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/verify-otp", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/reset-password", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/views/login.jsp", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/views/register.jsp", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/views/forgot-password.jsp", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/views/verify-otp.jsp", "/WEB-INF/decorators/auth.jsp")
-               .addDecoratorPath("/views/reset-password.jsp", "/WEB-INF/decorators/auth.jsp");
+        // In SiteMesh 3, the default decorator directory is /WEB-INF/decorators/
+        // Specifying "auth.jsp" resolves to /WEB-INF/decorators/auth.jsp
+        builder.addDecoratorPath("/login", "auth.jsp")
+               .addDecoratorPath("/register", "auth.jsp")
+               .addDecoratorPath("/forgot-password", "auth.jsp")
+               .addDecoratorPath("/verify-otp", "auth.jsp")
+               .addDecoratorPath("/reset-password", "auth.jsp")
+               .addDecoratorPath("/views/login.jsp", "auth.jsp")
+               .addDecoratorPath("/views/register.jsp", "auth.jsp")
+               .addDecoratorPath("/views/forgot-password.jsp", "auth.jsp")
+               .addDecoratorPath("/views/verify-otp.jsp", "auth.jsp")
+               .addDecoratorPath("/views/reset-password.jsp", "auth.jsp");
 
-        // Main Web Decorator for all application pages
-        builder.addDecoratorPath("/*", "/WEB-INF/decorators/web.jsp");
+        // Main Web Decorator resolves to /WEB-INF/decorators/web.jsp
+        builder.addDecoratorPath("/*", "web.jsp");
 
-        // Exclude static resources and internal files
+        // Exclude static resources and internal directories
         builder.addExcludedPath("/css/*")
                .addExcludedPath("/js/*")
                .addExcludedPath("/images/*")
