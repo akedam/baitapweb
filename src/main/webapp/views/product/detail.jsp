@@ -22,12 +22,18 @@
                 <div class="col-md-5 text-center">
                     <div class="bg-light rounded-4 p-3 d-flex align-items-center justify-content-center" style="min-height: 320px;">
                         <c:choose>
-                            <c:when test="${not empty product.image and product.image != 'default.jpg'}">
-                                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}" class="img-fluid rounded-3 shadow-xs object-fit-contain" style="max-height: 300px;">
+                            <c:when test="${not empty product.imageUrl and (product.imageUrl.startsWith('http://') or product.imageUrl.startsWith('https://'))}">
+                                <img src="${product.imageUrl}" alt="${product.name}" class="img-fluid rounded-3 shadow-xs object-fit-contain" style="max-height: 300px;">
+                            </c:when>
+                            <c:when test="${not empty product.imageUrl and product.imageUrl.startsWith('/')}">
+                                <img src="${product.imageUrl.startsWith(pageContext.request.contextPath) ? product.imageUrl : pageContext.request.contextPath.concat(product.imageUrl)}" alt="${product.name}" class="img-fluid rounded-3 shadow-xs object-fit-contain" style="max-height: 300px;">
+                            </c:when>
+                            <c:when test="${not empty product.imageUrl and product.imageUrl != 'default.jpg'}">
+                                <img src="${pageContext.request.contextPath}/uploads/${product.imageUrl}" alt="${product.name}" class="img-fluid rounded-3 shadow-xs object-fit-contain" style="max-height: 300px;">
                             </c:when>
                             <c:otherwise>
                                 <div class="text-muted text-center">
-                                    <i class="bi bi-image fs-1 opacity-25 d-block mb-2"></i>
+                                    <i class="bi bi-box-seam fs-1 opacity-25 d-block mb-2"></i>
                                     <span>Chưa có hình ảnh</span>
                                 </div>
                             </c:otherwise>

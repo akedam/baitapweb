@@ -123,14 +123,20 @@
                         <c:forEach var="p" items="${latestProducts}">
                             <div class="col">
                                 <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card transition">
-                                    <div class="position-relative bg-light text-center" style="height: 160px;">
+                                    <div class="position-relative bg-light text-center d-flex align-items-center justify-content-center overflow-hidden" style="height: 160px;">
                                         <c:choose>
-                                            <c:when test="${not empty p.image and p.image != 'default.jpg'}">
-                                                <img src="${pageContext.request.contextPath}/uploads/${p.image}" class="w-100 h-100 object-fit-cover" alt="${p.name}">
+                                            <c:when test="${not empty p.imageUrl and (p.imageUrl.startsWith('http://') or p.imageUrl.startsWith('https://'))}">
+                                                <img src="${p.imageUrl}" class="w-100 h-100 object-fit-cover" alt="${p.name}">
+                                            </c:when>
+                                            <c:when test="${not empty p.imageUrl and p.imageUrl.startsWith('/')}">
+                                                <img src="${p.imageUrl.startsWith(pageContext.request.contextPath) ? p.imageUrl : pageContext.request.contextPath.concat(p.imageUrl)}" class="w-100 h-100 object-fit-cover" alt="${p.name}">
+                                            </c:when>
+                                            <c:when test="${not empty p.imageUrl and p.imageUrl != 'default.jpg'}">
+                                                <img src="${pageContext.request.contextPath}/uploads/${p.imageUrl}" class="w-100 h-100 object-fit-cover" alt="${p.name}">
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
-                                                    <i class="bi bi-image fs-1 opacity-25"></i>
+                                                    <i class="bi bi-box-seam fs-1 opacity-25"></i>
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>

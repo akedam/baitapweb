@@ -63,12 +63,18 @@
                                         <td class="ps-4 fw-semibold text-muted">${status.index + 1}</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${not empty p.image and p.image != 'default.jpg'}">
-                                                    <img src="${pageContext.request.contextPath}/uploads/${p.image}" alt="${p.name}" class="rounded-3 border object-fit-cover shadow-xs" style="width: 54px; height: 54px;">
+                                                <c:when test="${not empty p.imageUrl and (p.imageUrl.startsWith('http://') or p.imageUrl.startsWith('https://'))}">
+                                                    <img src="${p.imageUrl}" alt="${p.name}" class="rounded-3 border object-fit-cover shadow-xs" style="width: 54px; height: 54px;">
+                                                </c:when>
+                                                <c:when test="${not empty p.imageUrl and p.imageUrl.startsWith('/')}">
+                                                    <img src="${p.imageUrl.startsWith(pageContext.request.contextPath) ? p.imageUrl : pageContext.request.contextPath.concat(p.imageUrl)}" alt="${p.name}" class="rounded-3 border object-fit-cover shadow-xs" style="width: 54px; height: 54px;">
+                                                </c:when>
+                                                <c:when test="${not empty p.imageUrl and p.imageUrl != 'default.jpg'}">
+                                                    <img src="${pageContext.request.contextPath}/uploads/${p.imageUrl}" alt="${p.name}" class="rounded-3 border object-fit-cover shadow-xs" style="width: 54px; height: 54px;">
                                                 </c:when>
                                                 <c:otherwise>
                                                     <div class="rounded-3 bg-light border d-flex align-items-center justify-content-center text-muted" style="width: 54px; height: 54px;">
-                                                        <i class="bi bi-image fs-5 opacity-50"></i>
+                                                        <i class="bi bi-box-seam fs-5 opacity-50"></i>
                                                     </div>
                                                 </c:otherwise>
                                             </c:choose>

@@ -99,12 +99,18 @@
                                     <div>
                                         <div class="small text-muted mb-1">Ảnh hiện tại:</div>
                                         <c:choose>
-                                            <c:when test="${not empty product.image and product.image != 'default.jpg'}">
-                                                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="Current" class="rounded-3 border object-fit-cover" style="width: 80px; height: 80px;">
+                                            <c:when test="${not empty product.imageUrl and (product.imageUrl.startsWith('http://') or product.imageUrl.startsWith('https://'))}">
+                                                <img src="${product.imageUrl}" alt="Current" class="rounded-3 border object-fit-cover" style="width: 80px; height: 80px;">
+                                            </c:when>
+                                            <c:when test="${not empty product.imageUrl and product.imageUrl.startsWith('/')}">
+                                                <img src="${product.imageUrl.startsWith(pageContext.request.contextPath) ? product.imageUrl : pageContext.request.contextPath.concat(product.imageUrl)}" alt="Current" class="rounded-3 border object-fit-cover" style="width: 80px; height: 80px;">
+                                            </c:when>
+                                            <c:when test="${not empty product.imageUrl and product.imageUrl != 'default.jpg'}">
+                                                <img src="${pageContext.request.contextPath}/uploads/${product.imageUrl}" alt="Current" class="rounded-3 border object-fit-cover" style="width: 80px; height: 80px;">
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="rounded-3 bg-light border d-flex align-items-center justify-content-center text-muted" style="width: 80px; height: 80px;">
-                                                    <i class="bi bi-image fs-4 opacity-50"></i>
+                                                    <i class="bi bi-box-seam fs-4 opacity-50"></i>
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>

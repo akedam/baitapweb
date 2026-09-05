@@ -73,14 +73,28 @@ public class Product implements Serializable {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    // Alias for JSTL convenience
-    public String getImage() {
-        if (imageUrl == null || imageUrl.isEmpty()) return "";
-        if (imageUrl.startsWith("/")) {
-            int lastSlash = imageUrl.lastIndexOf('/');
-            return imageUrl.substring(lastSlash + 1);
+    /**
+     * Smart resolver for displaying product image in JSP
+     */
+    public String getImageSrc() {
+        if (imageUrl == null || imageUrl.trim().isEmpty() || "default.jpg".equals(imageUrl.trim())) {
+            return "";
         }
-        return imageUrl;
+        String img = imageUrl.trim();
+        // External URL (e.g. Unsplash, HTTP/HTTPS)
+        if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("//")) {
+            return img;
+        }
+        // Already absolute or context-relative path
+        if (img.startsWith("/")) {
+            return img;
+        }
+        // Local uploaded filename
+        return "/uploads/" + img;
+    }
+
+    public String getImage() {
+        return getImageSrc();
     }
 
     public String getCategoryId() { return categoryId; }
