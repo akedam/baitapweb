@@ -6,10 +6,10 @@
 
     <display-name>baitapweb</display-name>
 
-    <!-- SiteMesh 3 Decorator Filter -->
+    <!-- SiteMesh 3 Decorator Filter using Custom Configuration -->
     <filter>
         <filter-name>sitemesh</filter-name>
-        <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+        <filter-class>com.app.filter.CustomSiteMeshFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
