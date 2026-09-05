@@ -10,8 +10,10 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.regex;
 import static com.mongodb.client.model.Sorts.descending;
 
 public class ProductDAO {
@@ -38,6 +40,29 @@ public class ProductDAO {
         } catch (IllegalArgumentException e) {
             return null; // Invalid ObjectId
         }
+    }
+
+    public List<Product> searchByName(String keyword) {
+        List<Product> products = new ArrayList<>();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return findAll();
+        }
+        Pattern pattern = Pattern.compile(Pattern.quote(keyword.trim()), Pattern.CASE_INSENSITIVE);
+        for (Document doc : collection.find(regex("name", pattern)).sort(descending("createdAt"))) {
+            products.add(documentToProduct(doc));
+        }
+        return products;
+    }
+
+    public List<Product> findByCategory(String categoryId) {
+        List<Product> products = new ArrayList<>();
+        if (categoryId == null || categoryId.trim().isEmpty()) {
+            return findAll();
+        }
+        for (Document doc : collection.find(eq("categoryId", categoryId.trim())).sort(descending("createdAt"))) {
+            products.add(documentToProduct(doc));
+        }
+        return products;
     }
 
     public void insert(Product product) {

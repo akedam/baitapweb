@@ -23,6 +23,14 @@ public class ProductService {
         return productDAO.findById(id);
     }
 
+    public List<Product> searchProductsByName(String keyword) {
+        return productDAO.searchByName(keyword);
+    }
+
+    public List<Product> getProductsByCategory(String categoryId) {
+        return productDAO.findByCategory(categoryId);
+    }
+
     public boolean addProduct(String name, double price, String description, String imageUrl, String categoryId) {
         if (name == null || name.trim().isEmpty() || price < 0 || categoryId == null || categoryId.trim().isEmpty()) {
             return false;
@@ -30,7 +38,7 @@ public class ProductService {
         
         // Default placeholder image if none provided
         String img = (imageUrl == null || imageUrl.trim().isEmpty()) 
-                     ? "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60"
+                     ? "default.jpg"
                      : imageUrl.trim();
 
         Product product = new Product(
@@ -55,7 +63,7 @@ public class ProductService {
         }
 
         String img = (imageUrl == null || imageUrl.trim().isEmpty()) 
-                     ? "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60"
+                     ? "default.jpg"
                      : imageUrl.trim();
 
         product.setName(name.trim());

@@ -1,85 +1,95 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <!DOCTYPE html>
-        <html lang="vi">
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Quản Lý Danh Mục - Category</title>
+</head>
+<body>
+    <div class="container py-4">
+        <!-- Breadcrumb & Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home" class="text-decoration-none">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Danh mục sản phẩm</li>
+                    </ol>
+                </nav>
+                <h3 class="fw-bold mb-0 text-dark"><i class="bi bi-folder-fill text-primary me-2"></i>Quản Lý Danh Mục</h3>
+            </div>
+            <a href="${pageContext.request.contextPath}/category?action=add" class="btn btn-primary px-4 rounded-pill shadow-sm fw-semibold">
+                <i class="bi bi-plus-lg me-1"></i> Thêm Danh Mục
+            </a>
+        </div>
 
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Danh Mục - LoginURL</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-        </head>
+        <c:if test="${not empty message}">
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 rounded-3 shadow-sm mb-4" role="alert">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <div>${message}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
 
-        <body>
-            <nav class="navbar">
-                <div class="nav-brand">📋 LoginURL App</div>
-                <div class="nav-links">
-                    <a href="${pageContext.request.contextPath}/home" class="nav-link">🏠 Trang Chủ</a>
-                    <a href="${pageContext.request.contextPath}/category" class="nav-link active">📂 Danh Mục</a>
-                    <a href="${pageContext.request.contextPath}/product" class="nav-link">🛍️ Sản Phẩm</a>
-                    <a href="${pageContext.request.contextPath}/product?action=manage" class="nav-link">⚙️ Quản Lý Sản
-                        Phẩm</a>
-                    <span class="nav-user">👤 ${sessionScope.fullName}</span>
-                    <a href="${pageContext.request.contextPath}/logout" class="nav-link nav-logout">🚪 Đăng Xuất</a>
-                </div>
-            </nav>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 rounded-3 shadow-sm mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                <div>${error}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
 
-            <div class="container">
-                <div class="page-header">
-                    <h2>📂 Quản Lý Danh Mục</h2>
-                    <a href="${pageContext.request.contextPath}/category?action=add" class="btn btn-primary">
-                        ➕ Thêm Danh Mục
-                    </a>
-                </div>
-
-                <c:if test="${not empty message}">
-                    <div class="alert alert-success">✅ ${message}</div>
-                </c:if>
-                <c:if test="${not empty error}">
-                    <div class="alert alert-error">⚠️ ${error}</div>
-                </c:if>
-
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">#</th>
-                                <th>Tên Danh Mục</th>
-                                <th>Mô Tả</th>
-                                <th style="width: 180px;">Hành Động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${empty categories}">
+        <!-- Category Table Card -->
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 py-3" style="width: 80px;">STT</th>
+                            <th class="py-3">Tên Danh Mục</th>
+                            <th class="py-3">Mô Tả</th>
+                            <th class="pe-4 py-3 text-end" style="width: 180px;">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:choose>
+                            <c:when test="${not empty categories}">
+                                <c:forEach var="cat" items="${categories}" varStatus="status">
                                     <tr>
-                                        <td colspan="4" class="empty-message">
-                                            Chưa có danh mục nào. Hãy thêm mới!
+                                        <td class="ps-4 fw-semibold text-muted">${status.index + 1}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="p-2 rounded-3 bg-primary-subtle text-primary d-inline-flex">
+                                                    <i class="bi bi-folder"></i>
+                                                </div>
+                                                <span class="fw-bold text-dark">${cat.name}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted small">${not empty cat.description ? cat.description : '<span class="fst-italic opacity-50">Không có mô tả</span>'}</td>
+                                        <td class="pe-4 text-end">
+                                            <a href="${pageContext.request.contextPath}/category?action=edit&id=${cat.id}" class="btn btn-outline-primary btn-sm rounded-pill px-3 me-1" title="Chỉnh sửa">
+                                                <i class="bi bi-pencil-square me-1"></i> Sửa
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/category?action=delete&id=${cat.id}" class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');" title="Xóa">
+                                                <i class="bi bi-trash me-1"></i> Xóa
+                                            </a>
                                         </td>
                                     </tr>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach var="cat" items="${categories}" varStatus="status">
-                                        <tr>
-                                            <td>${status.index + 1}</td>
-                                            <td><strong>${cat.name}</strong></td>
-                                            <td>${cat.description}</td>
-                                            <td class="action-cell">
-                                                <a href="${pageContext.request.contextPath}/category?action=edit&id=${cat.id}"
-                                                    class="btn btn-sm btn-edit">✏️ Sửa</a>
-                                                <a href="${pageContext.request.contextPath}/category?action=delete&id=${cat.id}"
-                                                    class="btn btn-sm btn-delete"
-                                                    onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')">🗑️
-                                                    Xóa</a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                                        Chưa có danh mục nào. Hãy bấm <strong>Thêm Danh Mục</strong> để tạo mới!
+                                    </td>
+                                </tr>
+                            </c:otherwise>
+                        </c:choose>
+                    </tbody>
+                </table>
             </div>
-        </body>
-
-        </html>
+        </div>
+    </div>
+</body>
+</html>

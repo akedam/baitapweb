@@ -3,52 +3,67 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Danh Mục - LoginURL</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <title>Thêm Danh Mục Mới - Category</title>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">📋 LoginURL App</div>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/home" class="nav-link">🏠 Trang Chủ</a>
-            <a href="${pageContext.request.contextPath}/category" class="nav-link active">📂 Danh Mục</a>
-            <a href="${pageContext.request.contextPath}/product" class="nav-link">🛍️ Sản Phẩm</a>
-            <a href="${pageContext.request.contextPath}/product?action=manage" class="nav-link">⚙️ Quản Lý Sản Phẩm</a>
-            <span class="nav-user">👤 ${sessionScope.fullName}</span>
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link nav-logout">🚪 Đăng Xuất</a>
-        </div>
-    </nav>
+    <div class="container py-4">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home" class="text-decoration-none">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/category" class="text-decoration-none">Danh mục</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thêm mới</li>
+            </ol>
+        </nav>
 
-    <div class="container">
-        <div class="form-card">
-            <h2>➕ Thêm Danh Mục Mới</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5">
+                    <div class="d-flex align-items-center gap-3 border-bottom pb-3 mb-4">
+                        <div class="p-3 bg-primary-subtle text-primary rounded-3 fs-4">
+                            <i class="bi bi-folder-plus"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0 text-dark">Thêm Danh Mục Mới</h4>
+                            <p class="text-muted small mb-0">Nhập thông tin danh mục sản phẩm mới</p>
+                        </div>
+                    </div>
 
-            <c:if test="${not empty error}">
-                <div class="alert alert-error">⚠️ ${error}</div>
-            </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 rounded-3 mb-4 small" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                            <div>${error}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </c:if>
 
-            <form action="${pageContext.request.contextPath}/category" method="POST" class="crud-form">
-                <input type="hidden" name="action" value="add">
+                    <form action="${pageContext.request.contextPath}/category" method="post" class="needs-validation" novalidate>
+                        <input type="hidden" name="action" value="add">
 
-                <div class="form-group">
-                    <label for="name">Tên danh mục <span class="required">*</span></label>
-                    <input type="text" id="name" name="name"
-                           placeholder="Nhập tên danh mục" required autofocus>
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold">Tên danh mục <span class="text-danger">*</span></label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text bg-light"><i class="bi bi-tag text-muted"></i></span>
+                                <input type="text" class="form-control" id="name" name="name" value="${param.name}" placeholder="VD: Điện thoại, Laptop, Đồng hồ..." required minlength="2" maxlength="100">
+                                <div class="invalid-feedback">Vui lòng nhập tên danh mục (từ 2 đến 100 ký tự).</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold">Mô tả chi tiết</label>
+                            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Nhập mô tả ngắn về danh mục này...">${param.description}</textarea>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-end gap-2 pt-3 border-top">
+                            <a href="${pageContext.request.contextPath}/category" class="btn btn-outline-secondary px-4 rounded-pill">
+                                <i class="bi bi-x-lg me-1"></i> Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm fw-semibold">
+                                <i class="bi bi-check-lg me-1"></i> Lưu Danh Mục
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label for="description">Mô tả</label>
-                    <textarea id="description" name="description" rows="4"
-                              placeholder="Nhập mô tả danh mục"></textarea>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 Lưu</button>
-                    <a href="${pageContext.request.contextPath}/category" class="btn btn-secondary">↩️ Quay Lại</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </body>

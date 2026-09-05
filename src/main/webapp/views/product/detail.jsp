@@ -4,61 +4,76 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${product.name} - Chi Tiết Sản Phẩm</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">📋 LoginURL App</div>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/home" class="nav-link">🏠 Trang Chủ</a>
-            <a href="${pageContext.request.contextPath}/category" class="nav-link">📂 Danh Mục</a>
-            <a href="${pageContext.request.contextPath}/product" class="nav-link active">🛍️ Sản Phẩm</a>
-            <a href="${pageContext.request.contextPath}/product?action=manage" class="nav-link">⚙️ Quản Lý Sản Phẩm</a>
-            <span class="nav-user">👤 ${sessionScope.fullName}</span>
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link nav-logout">🚪 Đăng Xuất</a>
-        </div>
-    </nav>
+    <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home" class="text-decoration-none">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/product" class="text-decoration-none">Sản phẩm</a></li>
+                <li class="breadcrumb-item active" aria-current="page">${product.name}</li>
+            </ol>
+        </nav>
 
-    <div class="container">
-        <div style="margin-bottom: 20px;">
-            <a href="javascript:history.back()" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
-                &larr; Quay lại
-            </a>
-        </div>
-
-        <div class="product-detail-card">
-            <div class="product-detail-layout">
-                <!-- Cột Trái: Ảnh sản phẩm -->
-                <div class="product-detail-image-sec">
-                    <img src="${product.imageUrl}" alt="${product.name}" class="product-detail-img">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden p-4 p-md-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-5 text-center">
+                    <div class="bg-light rounded-4 p-3 d-flex align-items-center justify-content-center" style="min-height: 320px;">
+                        <c:choose>
+                            <c:when test="${not empty product.image and product.image != 'default.jpg'}">
+                                <img src="${pageContext.request.contextPath}/uploads/${product.image}" alt="${product.name}" class="img-fluid rounded-3 shadow-xs object-fit-contain" style="max-height: 300px;">
+                            </c:when>
+                            <c:otherwise>
+                                <div class="text-muted text-center">
+                                    <i class="bi bi-image fs-1 opacity-25 d-block mb-2"></i>
+                                    <span>Chưa có hình ảnh</span>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
 
-                <!-- Cột Phải: Thông tin sản phẩm -->
-                <div class="product-detail-info-sec">
-                    <span class="product-detail-category-badge">
-                        📁 Danh mục: ${not empty category ? category.name : 'Không có'}
-                    </span>
-                    
-                    <h2 class="product-detail-title">${product.name}</h2>
-                    
-                    <div class="product-detail-price">
-                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
+                <div class="col-md-7">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill">
+                            <i class="bi bi-folder me-1"></i> ${product.categoryName != null ? product.categoryName : 'Danh mục chung'}
+                        </span>
+                        <c:choose>
+                            <c:when test="${product.quantity > 0}">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill">
+                                    <i class="bi bi-check-circle me-1"></i> Còn hàng (${product.quantity})
+                                </span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 rounded-pill">
+                                    <i class="bi bi-x-circle me-1"></i> Hết hàng
+                                </span>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
-                    <div class="product-detail-divider"></div>
-
-                    <div class="product-detail-desc-box">
-                        <h4>Mô tả sản phẩm:</h4>
-                        <p>${product.description}</p>
+                    <h2 class="fw-bold text-dark mb-3">${product.name}</h2>
+                    
+                    <div class="fs-2 fw-bold text-danger mb-4">
+                        <fmt:formatNumber value="${product.price}" pattern="#,###"/> <small class="fs-6 text-muted">VNĐ</small>
                     </div>
 
-                    <div class="product-detail-actions" style="margin-top: 30px;">
-                        <button class="btn btn-primary" onclick="alert('Đã thêm sản phẩm vào giỏ hàng giả định!')" style="padding: 14px 28px; font-size: 16px; display: inline-flex; align-items: center; gap: 8px; border-radius: 30px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
-                            🛒 Thêm Vào Giỏ Hàng
-                        </button>
+                    <div class="mb-4">
+                        <h6 class="fw-bold text-dark mb-2">Mô tả sản phẩm:</h6>
+                        <p class="text-muted leading-relaxed">${not empty product.description ? product.description : 'Chưa có mô tả chi tiết cho sản phẩm này.'}</p>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="${pageContext.request.contextPath}/product" class="btn btn-outline-secondary px-4 rounded-pill">
+                            <i class="bi bi-arrow-left me-1"></i> Quay lại
+                        </a>
+                        <a href="${pageContext.request.contextPath}/product?action=edit&id=${product.id}" class="btn btn-primary px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+                        </a>
                     </div>
                 </div>
             </div>

@@ -3,66 +3,66 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập - LoginURL</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <title>Đăng Nhập - Login</title>
 </head>
-<body class="login-page">
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>🔐 Đăng Nhập</h1>
-                <p>Vui lòng nhập thông tin đăng nhập</p>
+<body>
+    <div class="card-body p-4 p-sm-5">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-dark mb-1">Đăng Nhập Hệ Thống</h3>
+            <p class="text-muted small">Nhập thông tin tài khoản của bạn để tiếp tục</p>
+        </div>
+
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 py-2 px-3 rounded-3 mb-3 small" role="alert">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                <div>${error}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
+
+        <c:if test="${not empty success}">
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 py-2 px-3 rounded-3 mb-3 small" role="alert">
+                <i class="bi bi-check-circle-fill flex-shrink-0"></i>
+                <div>${success}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
+
+        <form action="${pageContext.request.contextPath}/login" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold text-secondary small">Tên đăng nhập</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+                    <input type="text" class="form-control" id="username" name="username" value="${param.username}" placeholder="Nhập username" required minlength="3" maxlength="50">
+                    <div class="invalid-feedback">Vui lòng nhập tên đăng nhập (tối thiểu 3 ký tự).</div>
+                </div>
             </div>
 
-            <c:if test="${not empty error}">
-                <div class="alert alert-error">
-                    ⚠️ ${error}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="password" class="form-label fw-semibold text-secondary small mb-0">Mật khẩu</label>
+                    <a href="${pageContext.request.contextPath}/forgot-password" class="text-decoration-none small text-primary">Quên mật khẩu?</a>
                 </div>
-            </c:if>
-
-            <c:if test="${not empty param.success}">
-                <div class="alert alert-success">
-                    ✅ ${param.success}
+                <div class="input-group has-validation mt-1">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required minlength="6">
+                    <div class="invalid-feedback">Vui lòng nhập mật khẩu (tối thiểu 6 ký tự).</div>
                 </div>
-            </c:if>
-
-            <form action="${pageContext.request.contextPath}/login" method="POST" class="login-form">
-                <div class="form-group">
-                    <label for="username">Tên đăng nhập</label>
-                    <input type="text" id="username" name="username"
-                           value="${not empty rememberedUser ? rememberedUser : username}"
-                           placeholder="Nhập tên đăng nhập" required autofocus>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password"
-                           placeholder="Nhập mật khẩu" required>
-                </div>
-
-                <div class="form-group checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="remember"
-                               ${not empty rememberedUser ? 'checked' : ''}>
-                        <span>Ghi nhớ đăng nhập</span>
-                    </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">
-                    Đăng Nhập
-                </button>
-            </form>
-
-            <div class="login-footer">
-                <p>Tài khoản mặc định: <strong>admin</strong> / <strong>admin123</strong></p>
-                <p style="margin-top: 12px; font-size: 13px; display: flex; justify-content: center; gap: 15px;">
-                    <a href="${pageContext.request.contextPath}/register" style="color: #667eea; font-weight: 600; text-decoration: none;">📝 Đăng ký tài khoản</a>
-                    <span style="color: #ccc;">|</span>
-                    <a href="${pageContext.request.contextPath}/forgot-password" style="color: #764ba2; font-weight: 600; text-decoration: none;">🔑 Quên mật khẩu?</a>
-                </p>
             </div>
+
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" value="true">
+                <label class="form-check-label text-muted small" for="rememberMe">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold rounded-3 shadow-sm mb-3">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Đăng Nhập
+            </button>
+        </form>
+
+        <div class="text-center text-muted small border-top pt-3">
+            Chưa có tài khoản? 
+            <a href="${pageContext.request.contextPath}/register" class="fw-semibold text-primary text-decoration-none">Đăng ký ngay</a>
         </div>
     </div>
 </body>

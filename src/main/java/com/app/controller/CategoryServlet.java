@@ -11,6 +11,7 @@ import java.util.List;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private CategoryService categoryService;
 
     @Override
@@ -22,6 +23,7 @@ public class CategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         // Check session
         HttpSession session = request.getSession(false);
@@ -82,6 +84,7 @@ public class CategoryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         // Check session
         HttpSession session = request.getSession(false);
@@ -96,19 +99,38 @@ public class CategoryServlet extends HttpServlet {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
 
-            if (categoryService.addCategory(name, description)) {
+            if (name == null || name.trim().length() < 2) {
+                request.setAttribute("error", "Tên danh mục phải có từ 2 đến 100 ký tự!");
+                request.setAttribute("param_name", name);
+                request.setAttribute("param_description", description);
+                request.getRequestDispatcher("/views/category/add.jsp").forward(request, response);
+                return;
+            }
+
+            if (categoryService.addCategory(name.trim(), description != null ? description.trim() : "")) {
                 response.sendRedirect(request.getContextPath() + "/category?success=added");
             } else {
-                request.setAttribute("error", "Tên danh mục không được để trống!");
+                request.setAttribute("error", "Không thể thêm danh mục, vui lòng kiểm tra lại!");
                 request.getRequestDispatcher("/views/category/add.jsp").forward(request, response);
             }
 
-        } else if ("update".equals(action)) {
+        } else if ("edit".equals(action) || "update".equals(action)) {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
             String description = request.getParameter("description");
 
-            if (categoryService.updateCategory(id, name, description)) {
+            if (name == null || name.trim().length() < 2) {
+                request.setAttribute("error", "Tên danh mục phải có từ 2 đến 100 ký tự!");
+                Category category = new Category();
+                category.setId(id);
+                category.setName(name);
+                category.setDescription(description);
+                request.setAttribute("category", category);
+                request.getRequestDispatcher("/views/category/edit.jsp").forward(request, response);
+                return;
+            }
+
+            if (categoryService.updateCategory(id, name.trim(), description != null ? description.trim() : "")) {
                 response.sendRedirect(request.getContextPath() + "/category?success=updated");
             } else {
                 request.setAttribute("error", "Cập nhật thất bại! Kiểm tra lại thông tin.");

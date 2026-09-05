@@ -46,15 +46,23 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String remember = request.getParameter("remember");
+        String remember = request.getParameter("rememberMe");
 
-        User user = userService.login(username, password);
+        // Server-side validation
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!");
+            request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+            return;
+        }
+
+        User user = userService.login(username.trim(), password.trim());
 
         if (user != null) {
-            // Kiểm tra xem tài khoản đã được kích hoạt chưa
+            // Check if account is active
             if (!user.isActive()) {
                 response.sendRedirect(request.getContextPath() 
                         + "/verify-otp?username=" + java.net.URLEncoder.encode(username, "UTF-8")
@@ -67,15 +75,15 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("username", user.getUsername());
             session.setAttribute("fullName", user.getFullName());
+            session.setAttribute("userAvatar", user.getImages());
 
             // Handle "Remember Me" cookie
-            if ("on".equals(remember)) {
+            if ("true".equals(remember) || "on".equals(remember)) {
                 Cookie cookie = new Cookie("rememberedUser", user.getUsername());
                 cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
                 cookie.setPath(request.getContextPath());
                 response.addCookie(cookie);
             } else {
-                // Remove cookie if unchecked
                 Cookie cookie = new Cookie("rememberedUser", "");
                 cookie.setMaxAge(0);
                 cookie.setPath(request.getContextPath());
@@ -84,10 +92,8 @@ public class LoginServlet extends HttpServlet {
 
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
-            // Redirect to /error page
-            response.sendRedirect(request.getContextPath()
-                    + "/error?message=" + java.net.URLEncoder.encode(
-                    "Tên đăng nhập hoặc mật khẩu không đúng!", "UTF-8"));
+            request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không chính xác!");
+            request.getRequestDispatcher("/views/login.jsp").forward(request, response);
         }
     }
 }
