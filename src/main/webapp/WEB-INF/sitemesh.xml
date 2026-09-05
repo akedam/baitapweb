@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
     <!-- Authentication layout -->
-    <mapping path="/login" decorator="/views/decorators/auth.jsp"/>
-    <mapping path="/register" decorator="/views/decorators/auth.jsp"/>
-    <mapping path="/forgot-password" decorator="/views/decorators/auth.jsp"/>
-    <mapping path="/verify-otp" decorator="/views/decorators/auth.jsp"/>
-    <mapping path="/reset-password" decorator="/views/decorators/auth.jsp"/>
+    <mapping path="/login" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/register" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/forgot-password" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/verify-otp" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/reset-password" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/views/login.jsp" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/views/register.jsp" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/views/forgot-password.jsp" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/views/verify-otp.jsp" decorator="/WEB-INF/decorators/auth.jsp"/>
+    <mapping path="/views/reset-password.jsp" decorator="/WEB-INF/decorators/auth.jsp"/>
 
     <!-- Main web layout -->
-    <mapping path="/" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/home" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/profile" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/category" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/category/*" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/product" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/product/*" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/error" decorator="/views/decorators/web.jsp"/>
-    <mapping path="/*" decorator="/views/decorators/web.jsp"/>
+    <mapping path="/" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/home" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/profile" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/category" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/category/*" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/product" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/product/*" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/error" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/views/*" decorator="/WEB-INF/decorators/web.jsp"/>
+    <mapping path="/*" decorator="/WEB-INF/decorators/web.jsp"/>
 
-    <!-- Exclude static resources and decorator jsp files -->
+    <!-- Exclude static resources and decorator files -->
     <mapping path="/css/*" exclude="true"/>
     <mapping path="/js/*" exclude="true"/>
     <mapping path="/images/*" exclude="true"/>
     <mapping path="/uploads/*" exclude="true"/>
     <mapping path="/assets/*" exclude="true"/>
+    <mapping path="/decorators/*" exclude="true"/>
     <mapping path="/views/decorators/*" exclude="true"/>
+    <mapping path="/WEB-INF/*" exclude="true"/>
 </sitemesh>
